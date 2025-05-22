@@ -12,4 +12,4 @@ function createChatCompletionsRouter(axiosInstance) {
 // Default router for production (uses default axios instance)
 const chatCompletionsRouter = createChatCompletionsRouter();
 
-export { chatCompletionsRouter, createChatCompletionsRouter }; 
+export { chatCompletionsRouter, createChatCompletionsRouter };
