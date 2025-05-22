@@ -5,12 +5,12 @@ describe('transformOpenAIRequestToOllama', () => {
     const openAIRequest = {
       messages: [
         { role: 'system', content: 'You are a helpful assistant.' },
-        { role: 'user', content: 'Hello!' }
+        { role: 'user', content: 'Hello!' },
       ],
       temperature: 0.5,
       top_p: 0.9,
       max_tokens: 100,
-      stream: true
+      stream: true,
     };
     const model = 'llama3:instruct';
     const ollamaReq = transformOpenAIRequestToOllama(openAIRequest, model);
@@ -21,9 +21,9 @@ describe('transformOpenAIRequestToOllama', () => {
       options: {
         temperature: 0.5,
         top_p: 0.9,
-        max_tokens: 100
+        max_tokens: 100,
       },
-      system: 'You are a helpful assistant.'
+      system: 'You are a helpful assistant.',
     });
   });
 
@@ -31,8 +31,8 @@ describe('transformOpenAIRequestToOllama', () => {
     const openAIRequest = {
       messages: [
         { role: 'user', content: 'Hi' },
-        { role: 'assistant', content: 'Hello there!' }
-      ]
+        { role: 'assistant', content: 'Hello there!' },
+      ],
     };
     const model = 'llama3:instruct';
     const ollamaReq = transformOpenAIRequestToOllama(openAIRequest, model);
@@ -43,8 +43,8 @@ describe('transformOpenAIRequestToOllama', () => {
       options: {
         temperature: 0.7,
         top_p: 1.0,
-        max_tokens: 2048
-      }
+        max_tokens: 2048,
+      },
     });
     expect(ollamaReq).not.toHaveProperty('system');
   });
@@ -61,13 +61,11 @@ describe('transformOllamaResponseToOpenAI', () => {
   it('should transform an Ollama response to OpenAI format', () => {
     const ollamaResponse = {
       response: 'Hello!',
-      done: true
+      done: true,
     };
     const model = 'llama3:instruct';
     const originalRequest = {
-      messages: [
-        { role: 'user', content: 'Hi' }
-      ]
+      messages: [{ role: 'user', content: 'Hi' }],
     };
     const result = transformOllamaResponseToOpenAI(ollamaResponse, model, originalRequest);
     expect(result).toMatchObject({
@@ -77,29 +75,27 @@ describe('transformOllamaResponseToOpenAI', () => {
         {
           index: 0,
           message: { role: 'assistant', content: 'Hello!' },
-          finish_reason: 'stop'
-        }
+          finish_reason: 'stop',
+        },
       ],
       usage: expect.objectContaining({
         prompt_tokens: expect.any(Number),
         completion_tokens: expect.any(Number),
-        total_tokens: expect.any(Number)
-      })
+        total_tokens: expect.any(Number),
+      }),
     });
   });
 
   it('should handle incomplete Ollama response', () => {
     const ollamaResponse = {
       response: 'Partial...',
-      done: false
+      done: false,
     };
     const model = 'llama3:instruct';
     const originalRequest = {
-      messages: [
-        { role: 'user', content: 'Hi' }
-      ]
+      messages: [{ role: 'user', content: 'Hi' }],
     };
     const result = transformOllamaResponseToOpenAI(ollamaResponse, model, originalRequest);
     expect(result.choices[0].finish_reason).toBe('length');
   });
-}); 
+});
