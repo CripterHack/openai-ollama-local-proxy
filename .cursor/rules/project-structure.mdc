@@ -1,0 +1,18 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Project Structure Guide
+
+This project is an OpenAI-compatible proxy for Ollama, implemented with Express.js.
+
+- The main entry point is [src/index.js](mdc:src/index.js), which sets up the Express server, middleware, and routes.
+- API routes are defined in [src/routes/chatCompletions.js](mdc:src/routes/chatCompletions.js), which forwards requests to the appropriate controller.
+- The main controller logic is in [src/controllers/chatCompletions.js](mdc:src/controllers/chatCompletions.js), handling request validation, model mapping, and forwarding to Ollama.
+- Utility functions for request/response transformation are in [src/utils/transformers.js](mdc:src/utils/transformers.js).
+- Configuration is managed in [src/utils/config.js](mdc:src/utils/config.js), which loads environment variables and sets defaults.
+
+Environment variables can be set in [example.env](mdc:example.env).
+
+The project uses [package.json](mdc:package.json) for dependency management.

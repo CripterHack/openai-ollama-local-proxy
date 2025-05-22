@@ -1,0 +1,11 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Routes: chatCompletions
+
+[src/routes/chatCompletions.js](mdc:src/routes/chatCompletions.js) defines the Express router for the `/v1/chat/completions` endpoint:
+
+- Forwards POST requests to the `forwardChatCompletionRequest` controller in [src/controllers/chatCompletions.js](mdc:src/controllers/chatCompletions.js).
+- Exported as `chatCompletionsRouter` and used in [src/index.js](mdc:src/index.js) to mount the route.

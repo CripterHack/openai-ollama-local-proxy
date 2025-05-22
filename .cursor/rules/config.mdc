@@ -1,0 +1,14 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Utility: Config
+
+[src/utils/config.js](mdc:src/utils/config.js) manages configuration for the project:
+
+- Loads environment variables using `dotenv`.
+- Exports a `config` object with server, Ollama, and logging settings.
+- Default values are provided for all configuration options.
+- Used throughout the codebase, including [src/index.js](mdc:src/index.js) and [src/controllers/chatCompletions.js](mdc:src/controllers/chatCompletions.js).
+- Environment variables can be set in [example.env](mdc:example.env).

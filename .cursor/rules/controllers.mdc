@@ -1,0 +1,15 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Controller: chatCompletions
+
+[src/controllers/chatCompletions.js](mdc:src/controllers/chatCompletions.js) handles the main logic for forwarding OpenAI-compatible chat completion requests to the Ollama API. It:
+
+- Validates incoming requests and required parameters.
+- Maps OpenAI model names to Ollama models.
+- Checks available models in Ollama and falls back to a default if needed.
+- Transforms requests and responses using [src/utils/transformers.js](mdc:src/utils/transformers.js).
+- Uses configuration from [src/utils/config.js](mdc:src/utils/config.js).
+- Handles errors and formats them in OpenAI-compatible style.

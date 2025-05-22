@@ -1,0 +1,12 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Utility: Transformers
+
+[src/utils/transformers.js](mdc:src/utils/transformers.js) provides utility functions to convert between OpenAI and Ollama API formats:
+
+- `transformOpenAIRequestToOllama` converts OpenAI chat completion requests to the format expected by Ollama, including prompt construction and options.
+- `transformOllamaResponseToOpenAI` converts Ollama responses back to OpenAI-compatible format, including token usage estimation.
+- Used by [src/controllers/chatCompletions.js](mdc:src/controllers/chatCompletions.js) to ensure compatibility between APIs.
