@@ -29,20 +29,20 @@ app.use((req, res) => {
     error: {
       message: `Invalid URL path: ${req.path}`,
       type: 'invalid_request_error',
-      code: 'path_not_found'
-    }
+      code: 'path_not_found',
+    },
   });
 });
 
 // Error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res, _next) => {
   logger.error(err.stack);
   res.status(err.status || 500).json({
     error: {
       message: err.message || 'Internal server error',
       type: err.type || 'server_error',
-      code: err.code || 'internal_error'
-    }
+      code: err.code || 'internal_error',
+    },
   });
 });
 
@@ -65,7 +65,9 @@ try {
   options.key = fs.readFileSync('server.key');
   options.cert = fs.readFileSync('server.crt');
 } catch (err) {
-  logger.warn('SSL certificate files not found or unreadable. HTTPS server will not start: ' + err.message);
+  logger.warn(
+    'SSL certificate files not found or unreadable. HTTPS server will not start: ' + err.message
+  );
 }
 
 // Start HTTPS server on port 443 (requires sudo)
@@ -77,4 +79,4 @@ if (options.key && options.cert) {
   } catch (err) {
     logger.warn('Could not start HTTPS server on port 443. Try running with sudo: ' + err.message);
   }
-} 
+}

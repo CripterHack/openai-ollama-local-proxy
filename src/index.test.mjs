@@ -1,6 +1,11 @@
 jest.mock('./utils/transformers.js', () => ({
-  transformOpenAIRequestToOllama: jest.fn(() => ({ model: 'mock', prompt: 'test', options: {}, stream: false })),
-  transformOllamaResponseToOpenAI: jest.fn(() => ({ result: 'ok' }))
+  transformOpenAIRequestToOllama: jest.fn(() => ({
+    model: 'mock',
+    prompt: 'test',
+    options: {},
+    stream: false,
+  })),
+  transformOllamaResponseToOpenAI: jest.fn(() => ({ result: 'ok' })),
 }));
 jest.mock('axios');
 import { jest } from '@jest/globals';
@@ -10,12 +15,12 @@ axios.get = jest.fn();
 axios.post = jest.fn();
 import request from 'supertest';
 import express from 'express';
-import { chatCompletionsRouter, createChatCompletionsRouter } from './routes/chatCompletions.js';
+import { createChatCompletionsRouter } from './routes/chatCompletions.js';
 
 // Create a mock axios instance for integration tests
 const mockAxios = {
   get: jest.fn(),
-  post: jest.fn()
+  post: jest.fn(),
 };
 
 const app = express();
@@ -30,9 +35,7 @@ describe('/v1/chat/completions endpoint', () => {
   });
 
   it('should return 400 for missing messages', async () => {
-    const res = await request(app)
-      .post('/v1/chat/completions')
-      .send({});
+    const res = await request(app).post('/v1/chat/completions').send({});
     expect(res.status).toBe(400);
     expect(res.body.error).toBeDefined();
   });
@@ -44,12 +47,14 @@ describe('/v1/chat/completions endpoint', () => {
       .post('/v1/chat/completions')
       .send({ messages: [{ role: 'user', content: 'Hi' }], model: 'llama3:instruct' });
     expect(res.status).toBe(200);
-    expect(res.body).toEqual(expect.objectContaining({
-      object: 'chat.completion',
-      model: expect.any(String),
-      choices: expect.any(Array),
-      usage: expect.any(Object)
-    }));
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        object: 'chat.completion',
+        model: expect.any(String),
+        choices: expect.any(Array),
+        usage: expect.any(Object),
+      })
+    );
   });
 
   it('should fallback to default model if requested model not found', async () => {
@@ -59,12 +64,14 @@ describe('/v1/chat/completions endpoint', () => {
       .post('/v1/chat/completions')
       .send({ messages: [{ role: 'user', content: 'Hi' }], model: 'nonexistent-model' });
     expect(res.status).toBe(200);
-    expect(res.body).toEqual(expect.objectContaining({
-      object: 'chat.completion',
-      model: expect.any(String),
-      choices: expect.any(Array),
-      usage: expect.any(Object)
-    }));
+    expect(res.body).toEqual(
+      expect.objectContaining({
+        object: 'chat.completion',
+        model: expect.any(String),
+        choices: expect.any(Array),
+        usage: expect.any(Object),
+      })
+    );
   });
 
   it('should return 500 for Ollama API error', async () => {
@@ -79,4 +86,4 @@ describe('/v1/chat/completions endpoint', () => {
     expect(res.body).toHaveProperty('error');
     expect(res.body.error.message).toMatch(/Ollama API error/);
   });
-}); 
+});
