@@ -23,12 +23,14 @@ This proxy allows you to use any OpenAI-compatible client library or application
 ## Installation
 
 1. Clone this repository:
+
    ```
-   git clone https://github.com/yourusername/openai-ollama-local-proxy.git
+   git clone https://github.com/CripterHack/openai-ollama-local-proxy.git
    cd openai-ollama-local-proxy
    ```
 
 2. Install dependencies:
+
    ```
    npm install
    ```
@@ -58,7 +60,7 @@ The proxy includes a smart model mapping and fallback system:
 
 3. To use a specific Ollama model, simply specify its exact name as in your Ollama instance:
    ```javascript
-   model: 'llama3:instruct' // Will use this model if available, otherwise fall back
+   model: 'llama3:instruct'; // Will use this model if available, otherwise fall back
    ```
 
 ## Host Redirection Setup
@@ -110,6 +112,7 @@ To use existing OpenAI clients without modifying their code, you can redirect re
 Since the proxy intercepts HTTPS requests, you'll need to run the server with SSL certificates:
 
 1. The server requires SSL certificates to run HTTPS. The certificates are included in the repository:
+
    - `server.key`: SSL private key
    - `server.crt`: SSL certificate
 
@@ -121,11 +124,13 @@ Since the proxy intercepts HTTPS requests, you'll need to run the server with SS
 ## Usage
 
 1. Start the proxy server with administrator privileges (required for port 80/443):
+
    ```
    sudo npm start
    ```
-   
+
    On Windows, run Command Prompt as Administrator and use:
+
    ```
    npm start
    ```
@@ -133,6 +138,7 @@ Since the proxy intercepts HTTPS requests, you'll need to run the server with SS
 2. The server will be available at both standard HTTP/HTTPS ports and port 3000. Any requests to `api.openai.com` will be redirected to your local Ollama instance.
 
 3. Example with OpenAI Node.js client (using standard OpenAI endpoint):
+
    ```javascript
    import OpenAI from 'openai';
 
@@ -147,6 +153,7 @@ Since the proxy intercepts HTTPS requests, you'll need to run the server with SS
    ```
 
    You can also use standard OpenAI model names which will be mapped to your default model:
+
    ```javascript
    const completion = await openai.chat.completions.create({
      model: 'gpt-4', // Will be mapped to your default Ollama model
@@ -184,6 +191,20 @@ Tests use [Jest](https://jestjs.io/) and [Supertest](https://github.com/visionme
 
 This platform follows best practices for error handling, configuration, and logging. All core areas are covered by automated tests. Outstanding recommendations are only for optional improvements (dynamic model mapping, prompt flexibility, startup logic documentation, and security hardening for privileged ports).
 
+## Recommended Production Setup
+
+To further improve maintainability and deployment, consider adding:
+
+- **Dockerfile**: For containerized deployment.
+- **ESLint/Prettier**: For code linting and formatting.
+- **CI/CD**: Use GitHub Actions or similar for automated testing and deployment.
+
+## Improvements
+
+- Model mapping is now dynamic and always uses the current default model.
+- Prompt construction is now model-aware and adapts to Llama, Claude, GPT, or fallback formats.
+- For production readiness, consider adding a Dockerfile, ESLint/Prettier config, and CI workflow (e.g., GitHub Actions).
+
 ## License
 
-MIT 
+MIT
