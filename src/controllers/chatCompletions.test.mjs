@@ -1,6 +1,6 @@
 jest.mock('../utils/transformers.js', () => ({
   transformOpenAIRequestToOllama: jest.fn(() => ({})),
-  transformOllamaResponseToOpenAI: jest.fn(() => ({ result: 'ok' }))
+  transformOllamaResponseToOpenAI: jest.fn(() => ({ result: 'ok' })),
 }));
 jest.mock('axios');
 import { jest } from '@jest/globals';
@@ -19,7 +19,7 @@ const mockNext = jest.fn();
 // Remove global axios mocks for get/post
 const mockAxios = {
   get: jest.fn(),
-  post: jest.fn()
+  post: jest.fn(),
 };
 
 describe('forwardChatCompletionRequest', () => {
@@ -41,8 +41,8 @@ describe('forwardChatCompletionRequest', () => {
     const req = httpMocks.createRequest({
       body: {
         messages: [{ role: 'user', content: 'Hi' }],
-        model: 'gpt-4'
-      }
+        model: 'gpt-4',
+      },
     });
     const res = mockRes();
     mockAxios.get.mockResolvedValue({ data: { models: [{ name: config.ollama.defaultModel }] } });
@@ -52,20 +52,22 @@ describe('forwardChatCompletionRequest', () => {
     const data = res._getData();
     expect(typeof data).toBe('string');
     const parsed = JSON.parse(data);
-    expect(parsed).toEqual(expect.objectContaining({
-      object: 'chat.completion',
-      model: expect.any(String),
-      choices: expect.any(Array),
-      usage: expect.any(Object)
-    }));
+    expect(parsed).toEqual(
+      expect.objectContaining({
+        object: 'chat.completion',
+        model: expect.any(String),
+        choices: expect.any(Array),
+        usage: expect.any(Object),
+      })
+    );
   });
 
   it('should fallback to default model if requested model not found', async () => {
     const req = httpMocks.createRequest({
       body: {
         messages: [{ role: 'user', content: 'Hi' }],
-        model: 'nonexistent-model'
-      }
+        model: 'nonexistent-model',
+      },
     });
     const res = mockRes();
     mockAxios.get.mockResolvedValue({ data: { models: [{ name: config.ollama.defaultModel }] } });
@@ -75,20 +77,22 @@ describe('forwardChatCompletionRequest', () => {
     const data = res._getData();
     expect(typeof data).toBe('string');
     const parsed = JSON.parse(data);
-    expect(parsed).toEqual(expect.objectContaining({
-      object: 'chat.completion',
-      model: expect.any(String),
-      choices: expect.any(Array),
-      usage: expect.any(Object)
-    }));
+    expect(parsed).toEqual(
+      expect.objectContaining({
+        object: 'chat.completion',
+        model: expect.any(String),
+        choices: expect.any(Array),
+        usage: expect.any(Object),
+      })
+    );
   });
 
   it('should handle Ollama API errors gracefully', async () => {
     const req = httpMocks.createRequest({
       body: {
         messages: [{ role: 'user', content: 'Hi' }],
-        model: 'llama3:instruct'
-      }
+        model: 'llama3:instruct',
+      },
     });
     const res = mockRes();
     mockAxios.get.mockResolvedValue({ data: { models: [{ name: 'llama3:instruct' }] } });
@@ -108,8 +112,8 @@ describe('forwardChatCompletionRequest', () => {
     const req = httpMocks.createRequest({
       body: {
         messages: [{ role: 'user', content: 'Hi' }],
-        model: 'llama3:instruct'
-      }
+        model: 'llama3:instruct',
+      },
     });
     const res = mockRes();
     mockAxios.get.mockResolvedValue({ data: { models: [{ name: 'llama3:instruct' }] } });
@@ -118,4 +122,4 @@ describe('forwardChatCompletionRequest', () => {
     await forwardChatCompletionRequest(req, res, mockNext, mockAxios);
     expect(mockNext).toHaveBeenCalledWith(expect.any(Error));
   });
-}); 
+});
